@@ -157,6 +157,17 @@ export default {
       this.pageId = ret.pageId;
       this.previewSrc = `${APIS.ROOT}/public/pipelines/${this.pageId}/server/dist/index.html`;
     },
+    async prepareFromPage() {
+      // default template id '1'
+      this.pageId = this.$route.query.pageId;
+      const ret = await fetch(`${APIS.PIPLINE}/prepareFromPage`, {
+        method: 'POST',
+        body: {
+          pageId: this.pageId,
+        },
+      });
+      this.previewSrc = `${APIS.ROOT}/public/pipelines/${this.pageId}/server/dist/index.html`;
+    },
     async getPageBaseUrl() {
       const ret = await fetch(`${APIS.PIPLINE}/pageBaseUrl`, {
       });
@@ -316,10 +327,15 @@ export default {
     },
   },
   async mounted() {
-    this.templateId = this.$route.params.id;
+    this.templateId = this.$route.query.id;
+    this.pageId = this.$route.query.pageId;
     this.purpose = this.$route.query.purpose;
-
-    await this.prepareFromTemplate();
+    if(this.pageId) {
+      await this.prepareFromPage();
+    } else {
+      await this.prepareFromTemplate();
+    }
+    
     await this.getBaseConfigSchema();
     await this.getLibraryComponentsInfo();
     await this.getBaseConfig();

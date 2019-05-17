@@ -3,7 +3,9 @@ import Router from 'vue-router';
 import Pipeline from '@/pages/pipeline/editor';
 import Schema from '@/pages/tools/schema';
 import TemplateList from '@/pages/template/list';
+import PageList from '@/pages/pageList';
 import TemplateRouter from '@/pages/template/router';
+
 
 Vue.use(Router);
 
@@ -23,6 +25,11 @@ export default new Router({
       path: '/schema',
       name: 'Schema',
       component: Schema,
+    },
+    {
+      path: '/pagelist',
+      name: 'pagelist',
+      component: PageList,
     },
     ...TemplateRouter
   ],

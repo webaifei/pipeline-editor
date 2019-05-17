@@ -7,6 +7,7 @@
 import List from './list';
 import Add from './add';
 import Edit from './edit';
+import PageList from './../pageList';
 
 export default [
   {
@@ -23,5 +24,10 @@ export default [
     path: '/template/edit',
     name: 'Template Edit',
     component: Edit,
+  },
+  {
+    path: '/template/pagelist',
+    name: 'Template Page List',
+    component: PageList,
   },
 ];

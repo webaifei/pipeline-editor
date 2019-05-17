@@ -6,6 +6,7 @@
       <div class="template-list">
         <div class="template-item template-item--add">
           <el-button type="primary" @click="addTemplate">新增模板</el-button>
+          <router-link :to="{ name: 'pagelist'}">历史编辑页面</router-link>
         </div>
         <div class="template-item"
           v-for="(item) in templateList"
