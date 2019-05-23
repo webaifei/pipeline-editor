@@ -4,7 +4,9 @@
 
   </el-header>
   <el-container>
-    <el-aside width="200px">Aside</el-aside>
+    <el-aside width="200px">
+      
+    </el-aside>
     <el-container>
       <el-main>
          <el-table
@@ -29,7 +31,9 @@
             </el-table-column>
           </el-table>
       </el-main>
-      <el-footer>Footer</el-footer>
+      <el-footer>
+        published-url: {{url}}
+      </el-footer>
     </el-container>
   </el-container>
 </el-container>
@@ -45,6 +49,7 @@ export default {
   data() {
     return {
       tableData: [],
+      url: "",
       dataSchema: {
      
       },
@@ -64,6 +69,7 @@ export default {
         },
       });
       // console.log(ret);
+      this.url = ret.pageId;
       this.$message(ret.pageId);
     },
     async getPageList() {
