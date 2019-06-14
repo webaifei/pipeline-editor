@@ -1,32 +1,46 @@
 <template>
-  <div class="page-content">
-    <topbar title="支持的前端框架模板列表"
-      subtitle="pipeline 支持不同前端框架开发的页面模板, 无缝对接业务现有前端技术栈."/>
-    <div class="template-container">
-      <div class="template-list">
-        <div class="template-item template-item--add">
-          <el-button type="primary" @click="addTemplate">新增模板</el-button>
-          <router-link :to="{ name: 'pagelist'}">历史编辑页面</router-link>
-        </div>
-        <div class="template-item"
-          v-for="(item) in templateList"
-          :key="item.id">
-          <div class="template-item__thumbnail">
-            <img class="template-item__img" :src="getThumbnailUrl(item.thumbnail)" />
+  <el-container>
+    <el-header height="80">
+      
+    </el-header>
+    <el-main>
+      <div class="template-container">
+        <div class="template-list">
+          <div class="template-item template-item--add">
+            <el-button type="primary" @click="addTemplate">新增模板</el-button>
+            <router-link :to="{ name: 'pagelist'}">历史编辑页面</router-link>
           </div>
-          <div class="template-item__name">{{item.name}}</div>
-          <div class="template-item__button-group">
-              <el-button type="primary" size="small" plain @click="useTemplate(item)">使用</el-button>
-              <el-button type="warning" size="small" plain @click="editTemplate(item)">修改</el-button>
-              <el-button type="danger" size="small" plain @click="deleteTemplate(item)">删除</el-button>
+          <div class="template-item"
+            v-for="(item) in templateList"
+            :key="item.id">
+            <div class="template-item__thumbnail">
+              <img class="template-item__img" :src="getThumbnailUrl(item.thumbnail)" />
+            </div>
+            <div class="template-item__name">{{item.name}}</div>
+            <div class="template-item__button-group">
+                <el-button type="primary" size="small" plain @click="useTemplate(item)">使用</el-button>
+                <el-button type="warning" size="small" plain @click="editTemplate(item)">修改</el-button>
+                <el-button type="danger" size="small" plain @click="deleteTemplate(item)">删除</el-button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </el-main>
+    <el-dialog
+      title="输入活动名称"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center>
+        <el-input v-model="name"></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="sureUseTemplate">确 定</el-button>
+        </span>
+    </el-dialog>
+  </el-container>
 </template>
 
 <script>
+
 import { APIS } from 'comp/util/constants';
 import fetch from 'comp/util/fetch';
 import Topbar from 'comp/topbar';
@@ -38,6 +52,9 @@ export default {
   },
   data() {
     return {
+      centerDialogVisible: false,
+      name: "",
+      templateId: "",
       templateList: [],
     };
   },
@@ -53,8 +70,15 @@ export default {
       return ret;
     },
     useTemplate(template) {
+      this.centerDialogVisible = true;
+      this.templateId = template.id;
+    },
+    sureUseTemplate() {
+      if(this.name === '') {
+        return this.$message.error('活动名称不能为空');
+      }
       this.$router.push({
-        path: `/pipeline?templateId=${template.id}`,
+        path: `/pipeline?templateId=${this.templateId}&name=${this.name}`,
       });
     },
     async addTemplate() {

@@ -16,13 +16,7 @@
             <span class="template-file-name">{{uploadFileName}}</span>
           </el-form-item>
           <el-form-item prop="thumbnail" label="模板封面">
-            <el-button size="small"
-              @click="onChooseImage">
-              <i class="el-icon-picture el-icon--right"></i>上传封面
-            </el-button>
-            <image-frame
-              :src="form.thumbnail">
-            </image-frame>
+            <el-input v-model="form.thumbnail" placeholder="请输入模板封面地址"></el-input>
           </el-form-item>
           <el-form-item label="">
             <el-button type="primary" size="small" @click="onSubmit">添加</el-button>
@@ -36,10 +30,6 @@
         ref="tplPageFileInput"
         type="file" name="file"
         @change="getFile"/>
-      <input style="display:none;"
-        ref="tplPageImageInput"
-        type="file" name="file"
-        @change="getImage"/>
     </form>
   </div>
 </template>
@@ -102,6 +92,7 @@ export default {
       const formData = new FormData();
       formData.append('templateId', this.templateId);
       formData.append('file', file);
+      formData.append('thumbnail', this.form.thumbnail);
 
       fetch(`${APIS.FILE}/upload`, {
         method: 'POST',
@@ -124,53 +115,6 @@ export default {
         this.$refs.tplPageFileInput.value = null;
       });
     },
-    getImage() {
-      const file = event.target.files[0];
-      const fileName = file.name;
-
-      if (!/bmg|gif|jpg|jpeg|pic|png$/i.test(fileName)) {
-        this.$refs.tplPageImageInput.value = null;
-        return this.$message({
-          message: '请选择图片.',
-          type: 'warning',
-        });
-      }
-
-      // 暂不支持上传超过 2M 的图片
-      if (file.size > 1024 * 1024 * 2) {
-        return this.$message({
-          message: '暂不支持上传超过 2M 的图片.',
-          type: 'warning',
-        });
-      }
-
-      const formData = new FormData();
-      formData.append('templateId', this.templateId);
-      formData.append('file', file);
-
-      this.form.thumbnail = URL.createObjectURL(file);
-      fetch(`${APIS.FILE}/upload`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        body: formData,
-      }).then(() => {
-        this.uploadImageName = fileName;
-        this.$refs.tplPageImageInput.value = null;
-        this.$message({
-          message: '上传成功.',
-          type: 'success',
-        });
-      }).catch(() => {
-        this.form.thumbnail = defaultImage;
-        this.$message({
-          message: '上传失败, 请检查网络.',
-          type: 'warning',
-        });
-        this.$refs.tplPageImageInput.value = null;
-      });
-    },
     async onSubmit() {
       const validate = await this.$refs.form.validate().catch(e => e);
 
@@ -189,7 +133,6 @@ export default {
         });
         return;
       }
-
       // 表单校验通过, 并且已经上传了模板
       if (validate) {
         fetch(`${APIS.TEMPLATE}`, {
@@ -198,7 +141,7 @@ export default {
             id: this.templateId,
             name: this.form.name,
             fileName: this.uploadFileName,
-            imageName: this.uploadImageName,
+            imageName: this.form.thumbnail,
           },
         }).then(() => {
           this.$message({

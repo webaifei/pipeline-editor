@@ -15,13 +15,17 @@
             style="width: 100%">
             <el-table-column
               prop="id"
-              label="ID"
-              width="180">
-            </el-table-column>
-            <el-table-column
-              prop="pageId"
               label="页面ID">
             </el-table-column>
+            <el-table-column
+              prop="name"
+              label="活动名称"/>
+            <el-table-column
+              prop="templateId"
+              label="模板ID"/>
+            <el-table-column
+              prop="status"
+              label="状态"/>
             <el-table-column
               label="操作">
                <template slot-scope="scope">
@@ -57,15 +61,15 @@ export default {
   },
   methods: {
     handleClick(item) {
-      const {pageId} = item;
-      this.$router.push(`pipeline?pageId=${pageId}`);
+      const {id} = item;
+      this.$router.push(`pipeline?pageId=${id}`);
     },
     async publish(item) {
-      const {pageId} = item;
+      const {id} = item;
       const ret = await fetch(`${APIS.PIPLINE}/publish`, {
         method: 'POST',
         body: {
-          pageId
+          pageId: id+""
         },
       });
       // console.log(ret);

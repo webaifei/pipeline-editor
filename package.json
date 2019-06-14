@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "element-ui": "^2.9.1",
     "nprogress": "^0.2.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
@@ -30,7 +31,6 @@
     "chalk": "^2.0.1",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.0",
-    "element-ui": "^2.3.6",
     "eslint": "^4.15.0",
     "eslint-config-airbnb-base": "^11.3.0",
     "eslint-friendly-formatter": "^3.0.0",
