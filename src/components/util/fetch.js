@@ -36,6 +36,7 @@ export default (api, options = {}) => {
       if (response.status === 200) {
         return response.json()
           .then((json) => {
+            console.log(json,"json");
             if (json.ret === '0') {
               return Promise.resolve(json.data);
             }
